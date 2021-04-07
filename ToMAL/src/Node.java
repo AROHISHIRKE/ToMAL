@@ -3,13 +3,13 @@ import java.util.LinkedList;
 public class Node extends Thread
 {
 	char name; 
-	Node localvar, parent;;//Local Variable to keep track of whom to return the token
-	boolean flag, token, cs;;//flag to mark new addition to the queue during critical section
-	LinkedList<Node> queue = new LinkedList<Node>();//local queue for each node
+	Node localvar, parent;												// Local Variable to keep track of whom to return the token
+	boolean flag, token, cs;											// flag to mark new addition to the queue during critical section
+	LinkedList<Node> queue = new LinkedList<Node>();					// local queue for each node
 	
 	//Constructor
-	public Node(char name)
-	{
+	public Node(char name) {
+		
 		this.name = name;
 		flag = false;
 		this.localvar = this.parent = null;
@@ -29,83 +29,54 @@ public class Node extends Thread
 	}
 	
 	@Override
-	public void run()
-	{
+	public void run() {
 		try {
-			//requesting token
-			//Thread.sleep((long)Math.random() * 1000);
-			request(true);
+			// requesting token
+			// Thread.sleep((long)Math.random() * 1000);
+			UpdatedRaymondMain.request(true, this);
 		}
 		catch( final Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void request(boolean req) 
-	{
-			
-			//adds the node to its own queue
-			if( req ) 
-			{
-				this.queue.add(this);
-				System.out.println(this.name + " Wants to enter the critical section");
-			}
-			
-			//add node to parent queue 
-			this.parent.queue.add(this);
-			
-			if( !this.parent.token )
-				// if not requesting
-				this.parent.request(false);
-			
-			else
-				this.parent.invoke();
-			
-	}
 	
-	synchronized public void invoke() 
-	{
+	
+	synchronized public void invoke() {
 			
 		UpdatedRaymondMain.printStatus();  //printing status
 		
-		if( this.cs ) 
-		{
-			while( this.cs ) 
-			{
+		if( this.cs ) {
+			while( this.cs ) {
 				//wait until process is out of critical section
 			}
 		}
 		
-		if( this.token ) 
-		{
-			if(this.queue.size() !=0)
-			{
-				// passing token
-				if( this.queue.getFirst() == this )
-				{
-					// if requesting node is having token
-					this.criticalSection();
-				}
-				else 
-				{
-					//if requesting node is not having token
-					this.parent = this.queue.getFirst();
-					this.parent.parent = null;
-					
-					// setting flag variables
-					this.token = false;
-					this.parent.token = true;
-					
-					System.out.println(this.parent.name + " has the token ");
-					
-					this.queue.removeFirst();
-					
-					if( this.queue.size() != 0 )
-						// if queue of token holder not empty then add to parent's local variable
-						this.parent.localvar = this;
-					
-					this.parent.invoke();
-				}
+		if( this.token ) {
+			
+			// passing token
+			if( this.queue.getFirst() == this ) {
+				// if requesting node is having token
+				this.criticalSection();
+			}
+			else {
+				//if requesting node is not having token
+				this.parent = this.queue.getFirst();
+				this.parent.parent = null;
+				
+				// setting flag variables
+				this.token = false;
+				this.parent.token = true;
+				
+				System.out.println(this.parent.name + " has the token ");
+				
+				this.queue.removeFirst();
+				
+				if( this.queue.size() != 0 )
+					// if queue of token holder not empty then add to parent's local variable
+					this.parent.localvar = this;
+				
+				this.parent.invoke();
 			}
 		}
 	}
@@ -132,35 +103,35 @@ public class Node extends Thread
 		
 		int updatedLen = this.queue.size();		
 		// if queue is not empty
-		if( this.localvar != null )
-		{
+		if( this.localvar != null ) {
 			this.returnToken(updatedLen - length);
 		}
-		else
-		{
+		else {
 			this.invoke();
 		}
 	}
 	
-	synchronized public void returnToken(int len) 
-	{
+	synchronized public void returnToken(int len) {
+		
 		Node  a = this.localvar;
+		
 		this.parent = this.localvar;
 		this.localvar.parent = null;
 		this.token = false;
 		this.localvar.token = true;
+		
 		System.out.println("Process " + this.localvar.name + " has the token.");
-		for(int i = this.queue.size() - len; i<this.queue.size(); i++)
-		{
+		
+		for(int i = this.queue.size() - len; i<this.queue.size(); i++) {
 			this.localvar.queue.add(this.queue.get(i));
 		}
+		
 		this.localvar = null;
-		if(a.localvar != null)
-		{
+		
+		if(a.localvar != null) {
 			a.returnToken(len);
 		}
-		else
-		{
+		else {
 			a.invoke();
 		}
 	}
