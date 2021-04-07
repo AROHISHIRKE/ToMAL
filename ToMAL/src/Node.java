@@ -65,7 +65,7 @@ public class Node extends Thread
 		
 	}
 
-	synchronized public void invoke() {
+	synchronized public void invoke() throws InterruptedException {
 			
 		UpdatedRaymondMain.printStatus();  //printing status
 		
@@ -104,7 +104,7 @@ public class Node extends Thread
 		}
 	}
 	
-	synchronized public void criticalSection() 
+	synchronized public void criticalSection() throws InterruptedException 
 	{
 		//critical section
 		int length = this.queue.size();
@@ -135,7 +135,7 @@ public class Node extends Thread
 		}
 	}
 	
-	synchronized public void returnToken(int len) {
+	synchronized public void returnToken(int len) throws InterruptedException {
 		
 		Node  a = this.localvar;
 		

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class UpdatedRaymondMain {
@@ -6,7 +7,8 @@ public class UpdatedRaymondMain {
 	public static ArrayList<Node> nodeList = new ArrayList<Node>();
 	
 	
-	synchronized public static void printStatus() {
+	@SuppressWarnings("unchecked")
+	synchronized public static void printStatus() throws InterruptedException{
 		//prints the status
 
 		System.out.println("The lists of the nodes in the queue are:\n");
@@ -20,7 +22,9 @@ public class UpdatedRaymondMain {
 				System.out.println("The queue is empty.");
 			
 			else {
-				for(Node j : i.queue ) {
+				LinkedList<Node> sec_list = new LinkedList<Node>();
+		        sec_list = (LinkedList<Node>) i.queue.clone();
+				for(Node j : sec_list ) {
 					//print the local queue of each node
 					
 					System.out.print( j.name + " " );
@@ -50,7 +54,7 @@ public class UpdatedRaymondMain {
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		// main 
 		
 		Scanner sc = new Scanner(System.in);		
