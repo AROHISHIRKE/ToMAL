@@ -5,6 +5,7 @@ public class UpdatedRaymondMain {
 
 	public static ArrayList<Node> nodeList = new ArrayList<Node>();
 	
+	
 	synchronized public static void printStatus() {
 		//prints the status
 
