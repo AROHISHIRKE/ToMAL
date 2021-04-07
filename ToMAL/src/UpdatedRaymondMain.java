@@ -5,26 +5,6 @@ public class UpdatedRaymondMain {
 
 	public static ArrayList<Node> nodeList = new ArrayList<Node>();
 	
-	synchronized public static void request(boolean req, Node node) {
-		
-		//adds the node to its own queue
-		if( req ) {
-			node.queue.add( node );
-			System.out.println( node.name + " Wants to enter the critical section");
-		}
-		
-		//add node to parent queue 
-		node.parent.queue.add( node );
-		
-		if( !node.parent.token )
-			// if not requesting
-			request( false, node.parent );
-		
-		else
-			node.parent.invoke();
-		
-	}
-	
 	
 	synchronized public static void printStatus() {
 		//prints the status

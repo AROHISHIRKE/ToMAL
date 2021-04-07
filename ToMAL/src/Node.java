@@ -2,6 +2,8 @@ import java.util.LinkedList;
 
 public class Node extends Thread
 {
+	public static Object obj = new Object();
+	
 	char name; 
 	Node localvar, parent;												// Local Variable to keep track of whom to return the token
 	boolean flag, token, cs;											// flag to mark new addition to the queue during critical section
@@ -32,16 +34,37 @@ public class Node extends Thread
 	public void run() {
 		try {
 			// requesting token
-			// Thread.sleep((long)Math.random() * 1000);
-			UpdatedRaymondMain.request(true, this);
+			Thread.sleep((long)Math.random() * 1000);
+			this.request(true);
 		}
 		catch( final Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
-	
+	public void request(boolean req) throws InterruptedException {
+			
+		// adds the node to its own queue
+		synchronized( obj ) {	
+			
+			if( req ) {
+				this.queue.add( this );
+				System.out.println( this.name + " Wants to enter the critical section");
+			}
+		
+			// add node to parent queue 
+			this.parent.queue.add( this );
+		}
+		
+		if( !this.parent.token )
+			// if not requesting
+			this.parent.request( false );
+		
+		else
+			this.parent.invoke();
+		
+	}
+
 	synchronized public void invoke() {
 			
 		UpdatedRaymondMain.printStatus();  //printing status
@@ -107,7 +130,8 @@ public class Node extends Thread
 			this.returnToken(updatedLen - length);
 		}
 		else {
-			this.invoke();
+			if( this.queue.size() != 0 )
+				this.invoke();
 		}
 	}
 	
@@ -132,7 +156,8 @@ public class Node extends Thread
 			a.returnToken(len);
 		}
 		else {
-			a.invoke();
+			if( a.queue.size() != 0 )
+				a.invoke();
 		}
 	}
 	
