@@ -54,7 +54,8 @@ public class UpdatedRaymondMain {
 	}
 	
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException
+	{
 		// main 
 		
 		Scanner sc = new Scanner(System.in);		
@@ -72,7 +73,7 @@ public class UpdatedRaymondMain {
 		}
 		
 		System.out.println("Enter the name of the node having the token:-  ");
-		char root = sc.next().charAt(0);
+		char root = sc.next().charAt(0);//initiator
 		
 		nodeList.get(names.indexOf(root)).setParent(null);
 		
@@ -93,5 +94,6 @@ public class UpdatedRaymondMain {
 				j.start();
 			}
 		}
+		
 	}
 }
