@@ -48,8 +48,8 @@ public class Node extends Thread
 		synchronized( obj ) {	
 			
 			if( req ) {
-				this.queue.add( this );
 				System.out.println( this.name + " Wants to enter the critical section");
+				this.queue.add( this );
 			}
 		
 			// add node to parent queue 
@@ -95,7 +95,7 @@ public class Node extends Thread
 				
 				this.queue.removeFirst();
 				
-				if( this.queue.size() != 0 )
+				if( this.queue.size() != 0 || this.localvar != null )
 					// if queue of token holder not empty then add to parent's local variable
 					this.parent.localvar = this;
 				
@@ -107,11 +107,11 @@ public class Node extends Thread
 	synchronized public void criticalSection() throws InterruptedException 
 	{
 		//critical section
-		int length = this.queue.size();
 		System.out.println("Process " + this.name + " is entering Critical Section");
 		
 		this.cs = true;
 		this.queue.removeFirst();
+		int length = this.queue.size();
 		
 		try {
 			Thread.sleep((long)( Math.random() * 5000 ));
