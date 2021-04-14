@@ -5,7 +5,8 @@ import java.util.Scanner;
 public class UpdatedRaymondMain {
 
 	public static ArrayList<Node> nodeList = new ArrayList<Node>();
-		
+	
+	
 	@SuppressWarnings("unchecked")
 	synchronized public static void printStatus() throws InterruptedException{
 		//prints the status
@@ -60,37 +61,28 @@ public class UpdatedRaymondMain {
 		Scanner sc = new Scanner(System.in);		
 		
 		// taking the names of each node as characters (space separated)
-		
 		System.out.println("Enter the name of nodes:-     ");
 		String names = sc.nextLine();
 		names = names.replace(" ","");
-
+		
 		int i, len = names.length();
 		
 		for( i = 0; i < len; i++ ) {
 			// creating objects
-			nodeList.add( new Node( names.charAt(i) ) );
+			nodeList.add(new Node( names.charAt(i) ));
 		}
 		
 		System.out.println("Enter the name of the node having the token:-  ");
-		char root = sc.next().charAt(0);				//initiator
-		Node rootnode = null;
-		MST tree = new MST(len);
-		
-		for( Node j : nodeList )
-			if( j.name == root )
-				rootnode = j;
-		
-		tree.MSTGenerator( nodeList.indexOf( rootnode ) );
+		char root = sc.next().charAt(0);//initiator
 		
 		nodeList.get(names.indexOf(root)).setParent(null);
 		
 		for( Node j : nodeList ) {
 			// setting their parents
 			if ( j.name != root ) {
-
-				Node par = nodeList.get( tree.parent[ nodeList.indexOf( j ) ] ); 
-				j.setParent( par );
+				System.out.println("Enter the parent of " + j.name + ":" );
+				char parent = sc.next().charAt(0);
+				j.setParent( nodeList.get( names.indexOf(parent) ) );
 			}
 		}
 		
@@ -98,9 +90,10 @@ public class UpdatedRaymondMain {
 		
 		for( Node j : nodeList ) {
 			// start
-			if( j.parent != null ) {
+			if(j.parent != null) {
 				j.start();
 			}
 		}
+		
 	}
 }

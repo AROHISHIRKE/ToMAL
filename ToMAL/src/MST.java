@@ -1,20 +1,15 @@
-import java.util.Scanner;
+// A Java program for Prim's Minimum Spanning Tree (MST) algorithm.
+// The program is for adjacency matrix representation of the graph
+
 public class MST {
     // Number of vertices in the graph
-    int V;
-    int parent[];
-    
-    MST( int noOfNodes) {
-    	
-    	this.V = noOfNodes;
-    	
-    	// Array to store constructed MST
-    	this.parent = new int[V];
-    }
+    private static final int V = 5;
+  
     // A utility function to find the vertex with minimum key
     // value, from the set of vertices not yet included in MST
-    int minKey(int key[], Boolean mstSet[]) {
-        // Initialize minimum value
+    int minKey(int key[], Boolean mstSet[])
+    {
+        // Initialize min value
         int min = Integer.MAX_VALUE, min_index = -1;
   
         for (int v = 0; v < V; v++)
@@ -28,18 +23,24 @@ public class MST {
   
     // A utility function to print the constructed MST stored in
     // parent[]
-    void printMST(int parent[], int graph[][], int initiator) {
-        
-    	System.out.println("The spanning tree is:- ");
+    void printMST(int parent[], int graph[][], int initiator)
+    {
+        System.out.println("Edge \tWeight");
+        System.out.println("Initiator is: " + initiator);
         for (int i = 0; i < V; i++)
-        	if(i!=initiator) {
-        		System.out.println( UpdatedRaymondMain.nodeList.get( i ).name + " - " + UpdatedRaymondMain.nodeList.get( parent[i] ).name + "\t" );
+        	if(i!=initiator)
+        	{
+        		System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
         	}
     }
   
     // Function to construct and print MST for a graph represented
     // using adjacency matrix representation
-    void primMST(int graph[][], int initiator) {        
+    void primMST(int graph[][], int initiator)
+    {
+        // Array to store constructed MST
+        int parent[] = new int[V];
+  
         // Key values used to pick minimum weight edge in cut
         int key[] = new int[V];
   
@@ -59,7 +60,7 @@ public class MST {
   
         // The MST will have V vertices
         for (int count = 0; count < V-1 ; count++) {
-            // Pick the minimum key vertex from the set of vertices
+            // Pick thd minimum key vertex from the set of vertices
             // not yet included in MST
             int u = minKey(key, mstSet);
   
@@ -85,7 +86,8 @@ public class MST {
         printMST(parent, graph, initiator);
     }
   
-    public void MSTGenerator( int initiator ) {
+    public static void main(String[] args)
+    {
         /* Let us create the following graph
         2 3
         (0)--(1)--(2)
@@ -94,25 +96,15 @@ public class MST {
         | /     \ |
         (3)-------(4)
             9         */
-    	
-    	Scanner sc = new Scanner(System.in);
-    	
-        int graph[][] = new int[ V ][ V ];
-        /*	{ { 0, 1, 1, 0, 0 },
-				{ 0, 0, 1, 1, 0 },
-        		{ 0, 0, 0, 1, 1 },
-        		{ 0, 0, 0, 0, 1 },
-        		{ 0, 0, 0, 0, 0 } } */
-                              
-        System.out.println("Enter the graph");
-        
-        for( int i = 0; i < V; i++ ) {
-        	for( int j = 0; j < V; j++ ) {
-        
-        		graph[ i ][ j ] = sc.nextInt();
-        	}
-        }
+        MST t = new MST();
+        int graph[][] = new int[][] { { 0, 1, 1, 0, 0 },
+                                      { 0, 0, 1, 1, 0 },
+                                      { 0, 0, 0, 1, 1 },
+                                      { 0, 0, 0, 0, 1 },
+                                      { 0, 0, 0, 0, 0 } };
+  
         // Print the solution
-        primMST(graph, initiator);
+        int initiator = 1;
+        t.primMST(graph, initiator);
     }
 }
